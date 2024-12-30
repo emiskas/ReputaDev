@@ -39,6 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+
+
+# Where to redirect users if they are not logged in and try to access a restricted page
+LOGIN_URL = '/login/'  # Redirect to login page if not logged in
+
+# Where to redirect users after a successful login
+LOGIN_REDIRECT_URL = '/'  # Redirect to home or dashboard after login
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
