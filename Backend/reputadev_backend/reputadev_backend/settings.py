@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Default user authentication backend
+]
 
 # Where to redirect users if they are not logged in and try to access a restricted page
 LOGIN_URL = '/login/'  # Redirect to login page if not logged in
