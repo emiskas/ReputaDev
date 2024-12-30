@@ -1,0 +1,73 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Django migrations
+*/migrations/
+
+# SQLite database (if you're using it for local development)
+db.sqlite3
+
+# PostgreSQL database files (if applicable)
+*.pgsql
+*.postgresql
+
+# Local environment variables
+.env
+
+# Virtual environment
+venv/
+env/
+.venv/
+.env/
+bin/
+lib/
+lib64/
+include/
+*.egg-info/
+
+# Django specific files
+*.log
+*.pot
+*.pyc
+*.pyo
+*.db
+*.sqlite3
+
+# Static and media files (unless you're committing media files for some reason)
+static/
+media/
+
+# Media files that may contain sensitive data
+/media/*
+
+# IDE / Editor specific files
+.vscode/
+.idea/
+
+# MacOS specific
+.DS_Store
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+
+# PyCharm specific
+.idea/
+
+# VSCode specific
+.vscode/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Django Secrets (do not commit sensitive information like secret keys)
+secrets.py
+
+# Type of database (e.g., for SQLite)
+*.db
+*.sqlite3
+
+# Cache and backup files
+*.bak
+*.swp
