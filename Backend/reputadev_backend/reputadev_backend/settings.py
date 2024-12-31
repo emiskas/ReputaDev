@@ -51,6 +51,9 @@ LOGIN_URL = "/login/"  # Redirect to login page if not logged in
 # Where to redirect users after a successful login
 LOGIN_REDIRECT_URL = "/"  # Redirect to home or dashboard after login
 
+# Where to redirect users after a successful logout
+LOGOUT_REDIRECT_URL = "/"  # Redirect to home or dashboard after logout
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
