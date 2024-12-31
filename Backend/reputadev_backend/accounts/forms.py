@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from profiles.models import Profile
 
@@ -24,4 +25,13 @@ class UserRegistrationForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['bio', 'avatar']
+        fields = ["bio", "avatar"]
+
+
+class CustomLoginForm(AuthenticationForm):
+    username = forms.CharField(
+        max_length=150, widget=forms.TextInput(attrs={"autofocus": True})
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={"autocomplete": "current-password"})
+    )
