@@ -6,12 +6,11 @@ function Profile() {
   const [loading, setLoading] = useState(true);
 
   const username = window.location.pathname.split('/')[2];
-  console.log("Username from URL:", username);
 
   useEffect(() => {
     const fetchProfileData = async () => {
         try {
-            const response = await fetch(`http:/\/localhost:8000/profile/${username}/`);
+            const response = await fetch(`http://localhost:8000/profile/${username}/`);
             const data = await response.json();
             setProfile(data);
             setLoading(false);
