@@ -1,19 +1,24 @@
-from django.shortcuts import render
 from .models import Profile
+from django.http import JsonResponse
 
 
 def profile_view(request, username):
     try:
         profile = Profile.objects.get(user__username=username)
-
     except Profile.DoesNotExist:
         profile = None
 
-    context = {
-        "profile": profile,
-        "username": profile.user.username if profile else "User not found",
-        "bio": profile.bio if profile else "No bio available",
-        "reputation": profile.reputation if profile else 0,
-    }
+    if profile:
+        profile_data = {
+            "username": profile.user.username,
+            "bio": profile.bio,
+            "reputation": profile.reputation
+        }
+    else:
+        profile_data = {
+            "username": "User not found",
+            "bio": "No bio available",
+            "reputation": 0
+        }
 
-    return render(request, "profiles/profile.html", context)
+    return JsonResponse(profile_data)
