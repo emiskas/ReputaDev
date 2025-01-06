@@ -50,6 +50,22 @@ def custom_login(request):
     return render(request, "accounts/login.html", {"form": form})
 
 
+def profile_update(request):
+    if request.method == "POST":
+        form = ProfileUpdateForm(
+            request.POST, request.FILES, instance=request.user.profile
+        )
+        if form.is_valid():
+            form.save()
+            return redirect(
+                "profile"
+            )  # Redirect to the profile page (or anywhere else)
+    else:
+        form = ProfileUpdateForm(instance=request.user.profile)
+
+    return render(request, "accounts/profile_update.html", {"form": form})
+
+
 def custom_logout(request):
     logout(request)
     return redirect("home")

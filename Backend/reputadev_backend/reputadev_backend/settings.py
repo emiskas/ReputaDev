@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     "profiles",
     "accounts",
+    "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -55,6 +56,7 @@ LOGIN_REDIRECT_URL = "/"  # Redirect to home or dashboard after login
 LOGOUT_REDIRECT_URL = "/"  # Redirect to home or dashboard after logout
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -62,6 +64,10 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # React frontend URL
 ]
 
 ROOT_URLCONF = "reputadev_backend.urls"
@@ -104,6 +110,13 @@ DATABASES = {
     }
 }
 
+# The directory where media files (e.g., images, user-uploaded files) will be stored
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+# The URL that will serve media files (for development, use the following setting)
+MEDIA_URL = "/media/"
+
+
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -128,7 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Vilnius"
 
 USE_I18N = True
 
