@@ -37,6 +37,11 @@ function Profile() {
 
       {/* Displaying the profile data */}
       <div className="mt-6 text-center">
+      <img
+          src={`http://localhost:8000${profile.avatar}`}
+          alt={`${profile.username}'s avatar`}
+          className="w-32 h-32 rounded-full mx-auto mb-4"
+        />
         <h2 className="text-2xl font-semibold mb-2">{profile.username}</h2>
         <p className="text-lg text-gray-700 mb-4">{profile.bio}</p>
         <div className="flex justify-center items-center">
