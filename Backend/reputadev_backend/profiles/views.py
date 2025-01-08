@@ -12,13 +12,15 @@ def profile_view(request, username):
         profile_data = {
             "username": profile.user.username,
             "bio": profile.bio,
-            "reputation": profile.reputation
+            "reputation": profile.reputation,
+            "avatar": profile.avatar.url,
         }
     else:
         profile_data = {
             "username": "User not found",
             "bio": "No bio available",
-            "reputation": 0
+            "reputation": 0,
+            "avatar": profile.avatar.url,
         }
 
     return JsonResponse(profile_data)
