@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Register({ toggleForm, onSuccess }) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const csrfToken = window.csrfToken;
 
@@ -72,7 +74,7 @@ function Register({ toggleForm, onSuccess }) {
           {message && <p className="mt-4 text-center text-red-500">{message}</p>}
           <p className="text-center mt-4">
             Already have an account?{' '}
-            <button onClick={toggleForm} className="text-blue-500 hover:underline">
+            <button onClick={() => navigate('/login')} className="text-blue-500 hover:underline">
               Login
             </button>
           </p>

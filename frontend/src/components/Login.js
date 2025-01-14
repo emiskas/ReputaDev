@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Login({ toggleForm, onSuccess }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const csrfToken = window.csrfToken; // Get CSRF token from the global variable
 
@@ -73,7 +75,7 @@ function Login({ toggleForm, onSuccess }) {
           {message && <p className="mt-4 text-center text-red-500">{message}</p>}
           <p className="text-center mt-4">
             New here?{' '}
-            <button onClick={toggleForm} className="text-blue-500 hover:underline">
+            <button onClick={() => navigate('/register')} className="text-blue-500 hover:underline">
               Register
             </button>
           </p>
