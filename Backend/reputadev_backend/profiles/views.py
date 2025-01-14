@@ -9,27 +9,22 @@ from .models import Profile
 
 
 def profile_view(request, username):
+    if not username:
+        return JsonResponse({"error": "Username is required"}, status=400)
+
     try:
         profile = Profile.objects.get(user__username=username)
     except Profile.DoesNotExist:
-        profile = None
+        return JsonResponse({"error": "Profile not found"}, status=404)
 
-    if profile:
-        profile_data = {
+    return JsonResponse(
+        {
             "username": profile.user.username,
             "bio": profile.bio,
             "reputation": profile.reputation,
             "avatar": profile.avatar.url,
         }
-    else:
-        profile_data = {
-            "username": "User not found",
-            "bio": "No bio available",
-            "reputation": 0,
-            "avatar": profile.avatar.url,
-        }
-
-    return JsonResponse(profile_data)
+    )
 
 
 @csrf_exempt
@@ -63,7 +58,9 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            return JsonResponse({"message": "Login successful"}, status=200)
+            return JsonResponse(
+                {"message": "Login successful", "username": user.username}
+            )
         return JsonResponse({"error": "Invalid credentials"}, status=400)
 
     return JsonResponse({"error": "Invalid request method"}, status=400)
