@@ -9,27 +9,33 @@ function Login({ toggleForm, onSuccess }) {
   const csrfToken = window.csrfToken; // Get CSRF token from the global variable
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        'http://localhost:8000/api/login/', // Django login endpoint
-        { username, password },
-        {
-          headers: {
-            'X-CSRFToken': csrfToken, // Include CSRF token
-          },
-        }
-      );
-      setMessage(response.data.message);
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token); // Store the token if provided
+  e.preventDefault();
+  try {
+    const response = await axios.post(
+      'http://localhost:8000/api/login/', // Django login endpoint
+      { username, password },
+      {
+        headers: {
+          'X-CSRFToken': csrfToken, // Include CSRF token
+        },
       }
-      onSuccess(); // Call onSuccess to indicate successful login
-    } catch (error) {
-      const errorMessage = error.response?.data?.message || 'An error occurred';
-      setMessage(errorMessage);
+    );
+    setMessage(response.data.message);
+
+    // Store both the token and the username
+    if (response.data.username) {
+      localStorage.setItem('username', response.data.username); // Store the username
     }
-  };
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token); // Store the token
+    }
+
+    onSuccess(); // Call onSuccess to indicate successful login
+  } catch (error) {
+    const errorMessage = error.response?.data?.message || 'An error occurred';
+    setMessage(errorMessage);
+  }
+};
 
   return (
     <div className="flex min-h-screen">

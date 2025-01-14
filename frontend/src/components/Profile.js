@@ -1,43 +1,59 @@
 import React, { useState, useEffect } from 'react';
 
 function Profile() {
-  // State to hold the profile data
+  // State to hold the profile data and loading/error states
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const username = window.location.pathname.split('/')[2];
+  // Retrieve username from localStorage
+  const username = window.localStorage.getItem('username');
 
   useEffect(() => {
     const fetchProfileData = async () => {
-        try {
-            const response = await fetch(`http://localhost:8000/profile/${username}/`);
-            const data = await response.json();
-            setProfile(data);
-            setLoading(false);
-        } catch (error) {
-            console.error('Error fetching profile data: ', error);
-            setLoading(false);
+      if (!username) {
+        setError('No username found in localStorage');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // Fetch profile data from the backend
+        const response = await fetch(`http://localhost:8000/profile/${username}/`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
+        const data = await response.json();
+        setProfile(data); // Save profile data to state
+      } catch (error) {
+        console.error('Error fetching profile data:', error);
+        setError('Failed to load profile data');
+      } finally {
+        setLoading(false); // Stop the loading spinner
+      }
     };
 
     fetchProfileData();
   }, [username]);
 
+  // Render loading state
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  if (!profile) {
-    return <div>Profile not found.</div>;
+  // Render error state
+  if (error) {
+    return <div>Error: {error}</div>;
   }
 
+  // Render the profile page
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-3xl font-semibold text-center mb-4">Profile Page</h1>
 
       {/* Displaying the profile data */}
       <div className="mt-6 text-center">
-      <img
+        <img
           src={`http://localhost:8000${profile.avatar}`}
           alt={`${profile.username}'s avatar`}
           className="w-32 h-32 rounded-full mx-auto mb-4"
