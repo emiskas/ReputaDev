@@ -7,14 +7,19 @@ function Register({ toggleForm, onSuccess }) {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
+  const csrfToken = window.csrfToken;
+
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/register', {
-        username,
-        email,
-        password,
-      });
+      const response = await axios.post('http://localhost:8000/api/register/',
+      {username, email, password},
+        {
+        headers: {
+        'X-CSRFToken': csrfToken,
+         },
+        }
+      );
       setMessage(response.data.message);
       onSuccess(); // Call onSuccess to indicate successful registration
     } catch (error) {
@@ -28,12 +33,12 @@ function Register({ toggleForm, onSuccess }) {
       <div className="w-1/2 bg-cover bg-center" style={{ backgroundImage: 'url(/backgroundas.jpg)' }}></div>
       <div className="flex items-center justify-center w-1/2 bg-gray-100">
         <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-          <h2 className="text-3xl font-bold text-center text-gray-900">Registracija</h2>
+          <h2 className="text-3xl font-bold text-center text-gray-900">Registration</h2>
           <form onSubmit={handleRegister} className="space-y-6">
             <div>
               <input
                 type="text"
-                placeholder="Vartotojo vardas"
+                placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -42,7 +47,7 @@ function Register({ toggleForm, onSuccess }) {
             <div>
               <input
                 type="email"
-                placeholder="El. paštas"
+                placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -51,7 +56,7 @@ function Register({ toggleForm, onSuccess }) {
             <div>
               <input
                 type="password"
-                placeholder="Slaptažodis"
+                placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -61,14 +66,14 @@ function Register({ toggleForm, onSuccess }) {
               type="submit"
               className="w-full px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              Registruotis
+              Register
             </button>
           </form>
           {message && <p className="mt-4 text-center text-red-500">{message}</p>}
           <p className="text-center mt-4">
-            Jau turite paskyrą?{' '}
+            Already have an account?{' '}
             <button onClick={toggleForm} className="text-blue-500 hover:underline">
-              Prisijunkite
+              Login
             </button>
           </p>
         </div>
