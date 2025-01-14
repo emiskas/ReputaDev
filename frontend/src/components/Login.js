@@ -9,33 +9,31 @@ function Login({ toggleForm, onSuccess }) {
   const csrfToken = window.csrfToken; // Get CSRF token from the global variable
 
   const handleLogin = async (e) => {
-  e.preventDefault();
-  try {
-    const response = await axios.post(
-      'http://localhost:8000/api/login/', // Django login endpoint
-      { username, password },
-      {
-        headers: {
-          'X-CSRFToken': csrfToken, // Include CSRF token
-        },
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        'http://localhost:8000/api/login/',
+        { username, password },
+        {
+          headers: {
+            'X-CSRFToken': csrfToken,
+          },
+        }
+      );
+      setMessage(response.data.message);
+
+      // Save logged-in status and username
+      if (response.data.username) {
+        localStorage.setItem('username', response.data.username); // Store the username
+        localStorage.setItem('isLoggedIn', 'true'); // Save the logged-in status
       }
-    );
-    setMessage(response.data.message);
 
-    // Store both the token and the username
-    if (response.data.username) {
-      localStorage.setItem('username', response.data.username); // Store the username
+      onSuccess(); // Call onSuccess to indicate successful login
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || 'An error occurred';
+      setMessage(errorMessage);
     }
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token); // Store the token
-    }
-
-    onSuccess(); // Call onSuccess to indicate successful login
-  } catch (error) {
-    const errorMessage = error.response?.data?.message || 'An error occurred';
-    setMessage(errorMessage);
-  }
-};
+  };
 
   return (
     <div className="flex min-h-screen">
@@ -74,7 +72,7 @@ function Login({ toggleForm, onSuccess }) {
           </form>
           {message && <p className="mt-4 text-center text-red-500">{message}</p>}
           <p className="text-center mt-4">
-            New here? {' '}
+            New here?{' '}
             <button onClick={toggleForm} className="text-blue-500 hover:underline">
               Register
             </button>
