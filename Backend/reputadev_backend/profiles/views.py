@@ -1,5 +1,11 @@
-from .models import Profile
+import json
+
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+from .models import Profile
 
 
 def profile_view(request, username):
@@ -24,3 +30,40 @@ def profile_view(request, username):
         }
 
     return JsonResponse(profile_data)
+
+
+@csrf_exempt
+def register_view(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        username = data.get("username")
+        password = data.get("password")
+        email = data.get("email", "")
+
+        if User.objects.filter(username=username).exists():
+            return JsonResponse({"error": "Username already exists"}, status=400)
+
+        user = User.objects.create_user(
+            username=username, email=email, password=password
+        )
+        profile = Profile.objects.create(user=user)
+
+        return JsonResponse({"message": "User registered successfully"})
+    else:
+        return JsonResponse({"message": "Invalid request method"})
+
+
+@csrf_exempt
+def login_view(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        username = data.get("username")
+        password = data.get("password")
+
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            return JsonResponse({"message": "Login successful"}, status=200)
+        return JsonResponse({"error": "Invalid credentials"}, status=400)
+
+    return JsonResponse({"error": "Invalid request method"}, status=400)
